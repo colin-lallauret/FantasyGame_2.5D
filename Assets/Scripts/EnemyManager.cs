@@ -16,12 +16,27 @@ public class EnemyManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    void Start()
+    {
+        if (rewardObject != null)
+        {
+            rewardObject.SetActive(false);
+            Debug.Log("[EnemyManager] rewardObject désactivé au Start.");
+        }
+        else
+        {
+            Debug.LogWarning("[EnemyManager] rewardObject n'est PAS assigné !");
+        }
+    }
+
+    // Appelé par LE spawner qui doit compter pour la reward
     public void RegisterEnemy()
     {
         enemiesAlive++;
         Debug.Log("Enemy REGISTERED. Alive = " + enemiesAlive);
     }
 
+    // Appelé quand un enemy meurt (via SlashDamage)
     public void EnemyDied()
     {
         enemiesAlive--;
@@ -38,15 +53,22 @@ public class EnemyManager : MonoBehaviour
     {
         Debug.Log("✅ ALL ENEMIES DEAD → Reward!");
 
-        // 🎵 Coupe musique + joue reward sound
+        // 🎵 Couper musique + son reward
         if (MusicManager.instance != null)
         {
             MusicManager.instance.StopMusic();
             MusicManager.instance.PlayRewardSound();
         }
 
-        // 🎁 récompense
+        // 🎁 Afficher le portail / reward
         if (rewardObject != null)
+        {
             rewardObject.SetActive(true);
+            Debug.Log("[EnemyManager] rewardObject.SetActive(true) appelé.");
+        }
+        else
+        {
+            Debug.LogWarning("[EnemyManager] rewardObject est NULL au moment du reward !");
+        }
     }
 }

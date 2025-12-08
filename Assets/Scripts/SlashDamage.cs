@@ -13,37 +13,42 @@ public class SlashDamage : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        bool isEnemy = other.CompareTag("Enemy");
+        bool isGhost = other.CompareTag("Ghost");
+
+        if (!isEnemy && !isGhost)
+            return;
+
+        // VFX
+        if (hitVFX != null)
         {
-            // Spawn VFX de mort
-            if (hitVFX != null)
-            {
-                GameObject vfx = Instantiate(hitVFX, other.transform.position, Quaternion.identity);
-                Destroy(vfx, vfxDuration);
-            }
-
-            // Joue le son
-            if (hitSound != null)
-            {
-                AudioSource.PlayClipAtPoint(hitSound, other.transform.position);
-            }
-
-            // Camera shake via CinemachineShake
-            if (CinemachineShake.instance != null)
-            {
-                CinemachineShake.instance.TriggerShake(
-                    shakeAmplitude,
-                    shakeFrequency,
-                    shakeDuration
-                );
-            }
-
-            // ✅ prévenir le manager
-            if (EnemyManager.instance != null)
-                EnemyManager.instance.EnemyDied();
-
-            // Détruit l'ennemi
-            Destroy(other.gameObject);
+            GameObject vfx = Instantiate(hitVFX, other.transform.position, Quaternion.identity);
+            Destroy(vfx, vfxDuration);
         }
+
+        // Son
+        if (hitSound != null)
+        {
+            AudioSource.PlayClipAtPoint(hitSound, other.transform.position);
+        }
+
+        // Camera shake
+        if (CinemachineShake.instance != null)
+        {
+            CinemachineShake.instance.TriggerShake(
+                shakeAmplitude,
+                shakeFrequency,
+                shakeDuration
+            );
+        }
+
+        // 🔥 Compte uniquement les ENEMY (pas les Ghost)
+        if (isEnemy && EnemyManager.instance != null)
+        {
+            EnemyManager.instance.EnemyDied();
+        }
+
+        // Détruit l'objet touché (Enemy ou Ghost)
+        Destroy(other.gameObject);
     }
 }

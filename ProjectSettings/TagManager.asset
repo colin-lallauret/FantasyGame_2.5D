@@ -8,6 +8,7 @@ TagManager:
   - Key
   - Sword
   - Enemy
+  - Ghost
   layers:
   - Default
   - TransparentFX
