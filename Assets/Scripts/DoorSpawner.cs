@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 public class DoorSpawner : MonoBehaviour
 {
@@ -20,10 +19,6 @@ public class DoorSpawner : MonoBehaviour
     public Transform[] spawnPoints;
     public int enemiesPerPoint = 1;
 
-    [Header("Wave Settings")]
-    public int totalWaves = 3;
-    public float waveDelay = 2f;  // délai entre chaque vague
-
     private bool isOpened = false;
 
     private void OnTriggerEnter(Collider other)
@@ -33,7 +28,7 @@ public class DoorSpawner : MonoBehaviour
         if (inventory != null && inventory.HasKey)
         {
             OpenDoor();
-            StartCoroutine(SpawnWaves());  // 👈 lancement des vagues !
+            SpawnEnemies();
         }
         else
         {
@@ -58,33 +53,19 @@ public class DoorSpawner : MonoBehaviour
             audioSource.PlayOneShot(wrongSound);
     }
 
-    // 👇 Coroutine : spawn en 3 vagues avec délai
-    IEnumerator SpawnWaves()
-    {
-        for (int wave = 1; wave <= totalWaves; wave++)
-        {
-            Debug.Log($"🌊 Vague {wave}/{totalWaves} lancée !");
-            SpawnEnemies(); // spawn d’une vague
-
-            yield return new WaitForSeconds(waveDelay); 
-        }
-
-        Debug.Log("🔥 Toutes les vagues ont été spawn !");
-    }
-
     void SpawnEnemies()
     {
-        if (enemyPrefab == null || spawnPoints.Length == 0)
-        {
-            Debug.LogWarning("DoorSpawner : enemyPrefab ou spawnPoints non assignés.");
-            return;
-        }
+        if (enemyPrefab == null || spawnPoints.Length == 0) return;
 
         foreach (Transform point in spawnPoints)
         {
             for (int i = 0; i < enemiesPerPoint; i++)
             {
-                Instantiate(enemyPrefab, point.position, point.rotation);
+                GameObject enemy = Instantiate(enemyPrefab, point.position, point.rotation);
+
+                // ✅ enregistrer l’ennemi dans EnemyManager
+                if (EnemyManager.instance != null)
+                    EnemyManager.instance.RegisterEnemy();
             }
         }
     }
