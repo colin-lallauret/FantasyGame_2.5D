@@ -13,21 +13,20 @@ public class SlashDamage : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // On accepte Enemy ET Ghost
         bool isEnemy = other.CompareTag("Enemy");
         bool isGhost = other.CompareTag("Ghost");
 
         if (!isEnemy && !isGhost)
             return;
 
-        // 🔥 Spawn VFX de mort
+        // 🔥 Spawn VFX
         if (hitVFX != null)
         {
             GameObject vfx = Instantiate(hitVFX, other.transform.position, Quaternion.identity);
             Destroy(vfx, vfxDuration);
         }
 
-        // 🔊 Son de hit
+        // 🔊 Son
         if (hitSound != null)
         {
             AudioSource.PlayClipAtPoint(hitSound, other.transform.position);
@@ -43,13 +42,13 @@ public class SlashDamage : MonoBehaviour
             );
         }
 
-        // ✅ Seuls les Enemy comptent pour le manager
+        // ✅ Notifier le manager UNIQUEMENT si c'est un Enemy (pas Ghost)
         if (isEnemy && EnemyManager.instance != null)
         {
-            EnemyManager.instance.EnemyDied();
+            EnemyManager.instance.EnemyDied(other.gameObject);
         }
 
-        // 💀 Détruire l'objet touché
+        // 💀 Détruire (Enemy ou Ghost)
         Destroy(other.gameObject);
     }
 }

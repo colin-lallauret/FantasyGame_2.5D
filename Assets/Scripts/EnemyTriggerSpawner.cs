@@ -4,13 +4,13 @@ using System.Collections;
 public class EnemyTriggerSpawner : MonoBehaviour
 {
     [Header("Enemy Spawn")]
-    public GameObject enemyPrefab;      
-    public Transform[] spawnPoints;     
+    public GameObject enemyPrefab;      // Enemy OU Ghost
+    public Transform[] spawnPoints;
     public int enemiesPerPoint = 1;
 
     [Header("Options")]
     public bool spawnOnlyOnce = true;
-    public float spawnDelay = 2f;   // ⏱️ délai avant apparition (modifiable)
+    public float spawnDelay = 2f;   // ⏱️ délai avant apparition
 
     private bool hasSpawned = false;
 
@@ -30,10 +30,8 @@ public class EnemyTriggerSpawner : MonoBehaviour
     {
         Debug.Log($"⏳ EnemyTriggerSpawner : Attente de {spawnDelay} secondes avant spawn...");
 
-        // Attendre X secondes
         yield return new WaitForSeconds(spawnDelay);
 
-        // Maintenant spawn !
         SpawnEnemies();
     }
 
@@ -49,15 +47,15 @@ public class EnemyTriggerSpawner : MonoBehaviour
         {
             for (int i = 0; i < enemiesPerPoint; i++)
             {
-                GameObject enemy = Instantiate(enemyPrefab, point.position, point.rotation);
-                Debug.Log("Enemy SPAWNED : " + enemy.name);
+                GameObject spawned = Instantiate(enemyPrefab, point.position, point.rotation);
+                Debug.Log("SPAWNED : " + spawned.name + " (Tag = " + spawned.tag + ")");
 
-                // Enregistrer dans EnemyManager
+                // ✅ Enregistrer UNIQUEMENT si c'est un Enemy
                 if (EnemyManager.instance != null)
-                    EnemyManager.instance.RegisterEnemy();
+                    EnemyManager.instance.RegisterEnemy(spawned);
             }
         }
 
-        Debug.Log("EnemyTriggerSpawner : Enemies spawned !");
+        Debug.Log("EnemyTriggerSpawner : Spawn terminé !");
     }
 }

@@ -1506,7 +1506,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoopMusicPlayer
   sounds: []
-  audioSource: {fileID: 1696631421}
+  audioSource: {fileID: 1118356831}
   backgroundSource: {fileID: 1696631421}
   backgroundMusic: {fileID: 8300000, guid: 56ba864d10f52394aa2c6db2d9335df9, type: 3}
 --- !u!82 &1696631421
@@ -1522,7 +1522,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 56ba864d10f52394aa2c6db2d9335df9, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.113
+  m_Volume: 0.354
   m_Pitch: 1
   Loop: 1
   Mute: 0

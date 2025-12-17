@@ -15,7 +15,7 @@ public class DoorSpawner : MonoBehaviour
     public AudioClip wrongSound;
 
     [Header("Enemy Spawn")]
-    public GameObject enemyPrefab;
+    public GameObject enemyPrefab;   // prefab Enemy OU Ghost
     public Transform[] spawnPoints;
     public int enemiesPerPoint = 1;
 
@@ -23,7 +23,8 @@ public class DoorSpawner : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player") || isOpened) return;
+        if (!other.CompareTag("Player") || isOpened)
+            return;
 
         if (inventory != null && inventory.HasKey)
         {
@@ -55,17 +56,19 @@ public class DoorSpawner : MonoBehaviour
 
     void SpawnEnemies()
     {
-        if (enemyPrefab == null || spawnPoints.Length == 0) return;
+        if (enemyPrefab == null || spawnPoints == null || spawnPoints.Length == 0)
+            return;
 
         foreach (Transform point in spawnPoints)
         {
             for (int i = 0; i < enemiesPerPoint; i++)
             {
-                GameObject enemy = Instantiate(enemyPrefab, point.position, point.rotation);
+                // 🧟‍♂️ Spawn
+                GameObject spawned = Instantiate(enemyPrefab, point.position, point.rotation);
 
-                // ✅ enregistrer l’ennemi dans EnemyManager
+                // ✅ ENREGISTRER UNIQUEMENT si c'est un Enemy
                 if (EnemyManager.instance != null)
-                    EnemyManager.instance.RegisterEnemy();
+                    EnemyManager.instance.RegisterEnemy(spawned);
             }
         }
     }
