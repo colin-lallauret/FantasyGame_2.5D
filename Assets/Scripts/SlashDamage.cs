@@ -13,42 +13,37 @@ public class SlashDamage : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        bool isEnemy = other.CompareTag("Enemy");
-        bool isGhost = other.CompareTag("Ghost");
-
-        if (!isEnemy && !isGhost)
-            return;
-
-        // 🔥 Spawn VFX
-        if (hitVFX != null)
+        if (other.CompareTag("Enemy"))
         {
-            GameObject vfx = Instantiate(hitVFX, other.transform.position, Quaternion.identity);
-            Destroy(vfx, vfxDuration);
-        }
+            // Spawn VFX de mort
+            if (hitVFX != null)
+            {
+                GameObject vfx = Instantiate(hitVFX, other.transform.position, Quaternion.identity);
+                Destroy(vfx, vfxDuration);
+            }
 
-        // 🔊 Son
-        if (hitSound != null)
-        {
-            AudioSource.PlayClipAtPoint(hitSound, other.transform.position);
-        }
+            // Joue le son
+            if (hitSound != null)
+            {
+                AudioSource.PlayClipAtPoint(hitSound, other.transform.position);
+            }
 
-        // 📷 Camera shake
-        if (CinemachineShake.instance != null)
-        {
-            CinemachineShake.instance.TriggerShake(
-                shakeAmplitude,
-                shakeFrequency,
-                shakeDuration
-            );
-        }
+            // Camera shake via CinemachineShake
+            if (CinemachineShake.instance != null)
+            {
+                CinemachineShake.instance.TriggerShake(
+                    shakeAmplitude,
+                    shakeFrequency,
+                    shakeDuration
+                );
+            }
 
-        // ✅ Notifier le manager UNIQUEMENT si c'est un Enemy (pas Ghost)
-        if (isEnemy && EnemyManager.instance != null)
-        {
-            EnemyManager.instance.EnemyDied(other.gameObject);
-        }
+            // ✅ prévenir le manager
+            if (EnemyManager.instance != null)
+                EnemyManager.instance.EnemyDied();
 
-        // 💀 Détruire (Enemy ou Ghost)
-        Destroy(other.gameObject);
+            // Détruit l'ennemi
+            Destroy(other.gameObject);
+        }
     }
 }
