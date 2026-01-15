@@ -19261,7 +19261,7 @@ MonoBehaviour:
   - {fileID: 1315662307}
   - {fileID: 1854810850}
   - {fileID: 188920020}
-  enemiesPerPoint: 3
+  enemiesPerPoint: 1
 --- !u!1 &1824039371
 GameObject:
   m_ObjectHideFlags: 0
