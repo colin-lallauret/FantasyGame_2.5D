@@ -17,7 +17,7 @@ public class AutoFlip : MonoBehaviour
 
     [Header("Zoom + Scene Transition")]
     public Animator animator;
-    public string sceneToLoad = "SceneSansDecors";
+    public string sceneToLoad = "FinalColinTimeo";
     public float delayAfterZoom = 2f;
 
     private bool hasTriggeredTransition = false;

@@ -1048,7 +1048,7 @@ MonoBehaviour:
   ControledBook: {fileID: 0}
   AnimationFramesCount: 40
   animator: {fileID: 1007772763}
-  sceneToLoad: SceneSansDecors
+  sceneToLoad: FinalColinTimeo
   delayAfterZoom: 2
 --- !u!95 &1007772763
 Animator:
@@ -1733,7 +1733,7 @@ MonoBehaviour:
   mainCamera: {fileID: 1278963091}
   targetFOV: 20
   zoomDuration: 1
-  sceneToLoad: SceneSansDecors
+  sceneToLoad: FinalColinTimeo
   delayAfterZoom: 2
 --- !u!4 &1972920940
 Transform:
@@ -1762,7 +1762,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3cf637889a7b4761bbfee82bf170b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestLoadSceneKey
-  sceneToLoad: SceneSansDecors
+  sceneToLoad: FinalColinTimeo
 --- !u!1 &2023777103
 GameObject:
   m_ObjectHideFlags: 0

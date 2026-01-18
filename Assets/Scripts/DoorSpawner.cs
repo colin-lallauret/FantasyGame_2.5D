@@ -6,6 +6,9 @@ public class DoorSpawner : MonoBehaviour
     public GameObject doorClose;
     public GameObject doorOpen;
 
+    [Header("New Area Objects")]
+    public GameObject obstaclesToSpawn; 
+
     [Header("Player Inventory")]
     public PlayerInventory inventory;
 
@@ -13,6 +16,12 @@ public class DoorSpawner : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip successSound;
     public AudioClip wrongSound;
+    public AudioClip deletionSound;
+
+    [Header("Camera Shake Settings")]
+    public float shakeAmplitude = 2f;
+    public float shakeFrequency = 1.5f;
+    public float shakeDuration = 0.5f;
 
     [Header("Enemy Spawn")]
     public GameObject enemyPrefab;
@@ -43,8 +52,31 @@ public class DoorSpawner : MonoBehaviour
         if (doorClose != null) doorClose.SetActive(false);
         if (doorOpen != null) doorOpen.SetActive(true);
 
+        // ✅ Joue le son de la porte
         if (audioSource != null && successSound != null)
             audioSource.PlayOneShot(successSound);
+
+        // ✅ APPEL DE TON SCRIPT SHAKE
+        if (CinemachineShake.instance != null)
+        {
+            CinemachineShake.instance.TriggerShake(shakeAmplitude, shakeFrequency, shakeDuration);
+        }
+
+        DeleteSpawnedObstacles();
+    }
+
+    public void DeleteSpawnedObstacles()
+    {
+        if (obstaclesToSpawn != null)
+        {
+            if (audioSource != null && deletionSound != null)
+            {
+                audioSource.PlayOneShot(deletionSound);
+            }
+
+            Destroy(obstaclesToSpawn);
+            Debug.Log("Porte ouverte : Shake Custom + Destruction.");
+        }
     }
 
     void PlayWrongSound()
@@ -62,8 +94,6 @@ public class DoorSpawner : MonoBehaviour
             for (int i = 0; i < enemiesPerPoint; i++)
             {
                 GameObject enemy = Instantiate(enemyPrefab, point.position, point.rotation);
-
-                // ✅ Seuls les vrais ennemis comptent pour le portail
                 if (enemy.CompareTag("Enemy") && EnemyManager.instance != null)
                 {
                     EnemyManager.instance.RegisterEnemy();
