@@ -39,25 +39,20 @@ public class EnemyTriggerSpawner : MonoBehaviour
 
     void SpawnEnemies()
     {
-        if (enemyPrefab == null || spawnPoints == null || spawnPoints.Length == 0)
-        {
-            Debug.LogWarning("EnemyTriggerSpawner : enemyPrefab ou spawnPoints non assignés.");
-            return;
-        }
+        if (enemyPrefab == null || spawnPoints == null || spawnPoints.Length == 0) return;
 
         foreach (Transform point in spawnPoints)
         {
             for (int i = 0; i < enemiesPerPoint; i++)
             {
                 GameObject enemy = Instantiate(enemyPrefab, point.position, point.rotation);
-                Debug.Log("Enemy SPAWNED : " + enemy.name);
 
-                // Enregistrer dans EnemyManager
-                if (EnemyManager.instance != null)
+                // ✅ On n'enregistre que si c'est un tag "Enemy"
+                if (enemy.CompareTag("Enemy") && EnemyManager.instance != null)
+                {
                     EnemyManager.instance.RegisterEnemy();
+                }
             }
         }
-
-        Debug.Log("EnemyTriggerSpawner : Enemies spawned !");
     }
 }

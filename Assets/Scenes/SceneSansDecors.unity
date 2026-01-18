@@ -3035,7 +3035,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.13035314, y: 0, z: 0, w: 0.99146765}
-  m_LocalPosition: {x: 0.65, y: 3.1548183, z: -38.130157}
+  m_LocalPosition: {x: 0.65, y: 3.0948188, z: -38.13016}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6289,6 +6289,7 @@ GameObject:
   - component: {fileID: 576188685}
   - component: {fileID: 576188686}
   - component: {fileID: 576188687}
+  - component: {fileID: 576188688}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -6308,12 +6309,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7f152664dfb04de8a2cd61622d76925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  speed: 7
+  speed: 4
   groundDist: 0.51
+  jumpForce: 2
+  dashSpeed: 15
+  dashDuration: 0.2
+  dashCooldown: 1
+  idlePulseSpeed: 2
+  idlePulseAmount: 0.05
+  tiltAmount: 10
+  squashStretchTime: 0.1
+  audioSource: {fileID: 1040988678}
+  dashSound: {fileID: 8300000, guid: 9943671bff7f6e749b52e13d257f62ce, type: 3}
+  jumpSound: {fileID: 0}
   terrainLayer:
     serializedVersion: 2
     m_Bits: 64
-  rb: {fileID: 0}
+  rb: {fileID: 576188681}
   sr: {fileID: 1436135053}
 --- !u!54 &576188681
 Rigidbody:
@@ -6372,7 +6384,7 @@ Transform:
   m_GameObject: {fileID: 576188679}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.65, y: 0.57, z: -28.47}
+  m_LocalPosition: {x: 0.65, y: 0.51, z: -28.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6392,10 +6404,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4223c6c468105416f8bbf176d436634b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
-  keyIconImage: {fileID: 1500240661}
-  keyIcon: {fileID: 21300000, guid: aa6815f61fffe43298941cba3be4813e, type: 3}
   swordIconImage: {fileID: 899511599}
   swordIcon: {fileID: 21300000, guid: 963945e2d597f41a5915f25572958f64, type: 3}
+  keyIconImage: {fileID: 1500240661}
+  keyIcon: {fileID: 21300000, guid: aa6815f61fffe43298941cba3be4813e, type: 3}
   audioSource: {fileID: 1040988678}
   pickupSound: {fileID: 8300000, guid: c462cda4471ec48b08a5e53a50f84d49, type: 3}
 --- !u!114 &576188685
@@ -6430,7 +6442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHearts: 3
-  currentHearts: 0
+  currentHearts: 3
   heartImages:
   - {fileID: 2114069688}
   - {fileID: 2048848408}
@@ -6438,10 +6450,14 @@ MonoBehaviour:
   fullHeartSprite: {fileID: 21300000, guid: 2611ca51251094b6fae4459917ebe566, type: 3}
   emptyHeartSprite: {fileID: 21300000, guid: 56a8b29e52e1b4aee9cb88d24ee35b86, type: 3}
   deathPanel: {fileID: 1586198552}
+  audioSource: {fileID: 1040988678}
+  hitSound: {fileID: 8300000, guid: 05b9f033f1330754c80c7b615045f5dc, type: 3}
+  deathSound: {fileID: 8300000, guid: 961ac4c553939a6478ee6ca733b5122a, type: 3}
   shakeAmplitude: 1.2
   shakeFrequency: 2
   shakeDuration: 0.15
   damageFlash: {fileID: 2017941597}
+  knockbackForce: 12
 --- !u!114 &576188687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6454,6 +6470,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f491efa17fb54af0a52ad90a1ae7909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHitDetector
+--- !u!95 &576188688
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576188679}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b1890fa869cc57c4a8c4899c96827f36, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &582212796
 GameObject:
   m_ObjectHideFlags: 0
@@ -6624,6 +6662,37 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1948845918}
   m_SourcePrefab: {fileID: 100100000, guid: 815ec0c049d4ec849bd4960c32e13ec2, type: 3}
+--- !u!1 &592466138
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 592466139}
+  m_Layer: 0
+  m_Name: BossSpawnpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &592466139
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592466138}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10.49, y: 1.91, z: -3.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &593395370
 GameObject:
   m_ObjectHideFlags: 0
@@ -11680,7 +11749,7 @@ Transform:
   m_GameObject: {fileID: 1011280999}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.008, y: -0.055999994, z: 0.098}
+  m_LocalPosition: {x: -0.008, y: 0.06, z: 0.098}
   m_LocalScale: {x: 0.57, y: 0.57, z: 0.57}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -15354,7 +15423,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -793.75, y: 376.94}
+  m_AnchoredPosition: {x: -793.75, y: 330.7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1393761516
@@ -17416,7 +17485,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e71cb910f482c445f9ce582ac358eda9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
-  rewardObject: {fileID: 1500138613}
+  enemiesAlive: 0
+  bossPrefab: {fileID: 6648516789551595676, guid: 90ea4c604532e2147901ba2e06c98538, type: 3}
+  bossSpawnPoint: {fileID: 592466139}
+  portal: {fileID: 1500138613}
 --- !u!4 &1546014339
 Transform:
   m_ObjectHideFlags: 0
@@ -19122,8 +19194,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -407.75504, y: 169.65015}
-  m_SizeDelta: {x: 815.50995, y: 339.29968}
+  m_AnchoredPosition: {x: -407.75504, y: 153.85016}
+  m_SizeDelta: {x: 815.50995, y: 307.6997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1803202824
 CanvasRenderer:
@@ -21112,7 +21184,8 @@ MonoBehaviour:
   musicStart: {fileID: 8300000, guid: 5995433f9955b154d8e01395644cea7b, type: 3}
   musicDoorOpen: {fileID: 8300000, guid: 73e800617cbae8843909627cf37f3b01, type: 3}
   rewardSound: {fileID: 8300000, guid: 5394acdec329c4c05a5ec12f75cd729b, type: 3}
-  musicVolume: 0.09
+  victorySound: {fileID: 8300000, guid: fb2d97cddf1a04e538a043e028d90074, type: 3}
+  musicVolume: 0.045
 --- !u!4 &1987163629
 Transform:
   m_ObjectHideFlags: 0
@@ -21627,14 +21700,14 @@ RectTransform:
   m_LocalScale: {x: 1.66, y: 1.66, z: 1.66}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 510714688}
   - {fileID: 140234408}
+  - {fileID: 510714688}
   - {fileID: 1660265100}
   m_Father: {fileID: 1824039375}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -526.52}
+  m_AnchoredPosition: {x: 0, y: -465.1}
   m_SizeDelta: {x: 163, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2026981539
@@ -21928,8 +22001,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -332.5}
-  m_SizeDelta: {x: 0, y: -5.4000473}
+  m_AnchoredPosition: {x: 0, y: -287.71}
+  m_SizeDelta: {x: 0, y: 84.17997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2066472829
 MonoBehaviour:
@@ -22554,7 +22627,7 @@ Transform:
   m_GameObject: {fileID: 2090340380}
   serializedVersion: 2
   m_LocalRotation: {x: 0.13035314, y: -0, z: -0, w: 0.99146765}
-  m_LocalPosition: {x: 0.65, y: 3.1548183, z: -38.130157}
+  m_LocalPosition: {x: 0.65, y: 3.0948188, z: -38.13016}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23848,3 +23921,4 @@ SceneRoots:
   - {fileID: 1509690622}
   - {fileID: 2081786979}
   - {fileID: 1595091583}
+  - {fileID: 592466139}

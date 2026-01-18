@@ -63,9 +63,11 @@ public class DoorSpawner : MonoBehaviour
             {
                 GameObject enemy = Instantiate(enemyPrefab, point.position, point.rotation);
 
-                // ✅ enregistrer l’ennemi dans EnemyManager
-                if (EnemyManager.instance != null)
+                // ✅ Seuls les vrais ennemis comptent pour le portail
+                if (enemy.CompareTag("Enemy") && EnemyManager.instance != null)
+                {
                     EnemyManager.instance.RegisterEnemy();
+                }
             }
         }
     }

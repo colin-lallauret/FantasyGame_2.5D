@@ -4,49 +4,62 @@ public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance;
 
-    private int enemiesAlive = 0;
-    private bool rewardTriggered = false;
+    [Header("Progression")]
+    public int enemiesAlive = 0;
+    private bool bossSpawned = false;
 
-    [Header("Reward")]
-    public GameObject rewardObject;
+    [Header("Boss Settings")]
+    public GameObject bossPrefab;
+    public Transform bossSpawnPoint;
 
-    void Awake()
-    {
-        if (instance == null) instance = this;
-        else Destroy(gameObject);
+    [Header("Portail")]
+    public GameObject portal;
+
+    void Awake() 
+    { 
+        instance = this; 
     }
 
-    public void RegisterEnemy()
+    void Start()
     {
-        enemiesAlive++;
-        Debug.Log("Enemy REGISTERED. Alive = " + enemiesAlive);
+        if (portal != null) portal.SetActive(false);
     }
+
+    public void RegisterEnemy() { enemiesAlive++; }
 
     public void EnemyDied()
     {
         enemiesAlive--;
-        Debug.Log("Enemy DIED. Alive = " + enemiesAlive);
-
-        if (enemiesAlive <= 0 && !rewardTriggered)
+        if (enemiesAlive <= 0 && !bossSpawned)
         {
-            rewardTriggered = true;
-            OnAllEnemiesDead();
+            SpawnBoss();
         }
     }
 
-    void OnAllEnemiesDead()
+    void SpawnBoss()
     {
-        Debug.Log("✅ ALL ENEMIES DEAD → Reward!");
+        bossSpawned = true;
+        if (bossPrefab != null && bossSpawnPoint != null)
+        {
+            Instantiate(bossPrefab, bossSpawnPoint.position, bossSpawnPoint.rotation);
+            Debug.Log("Le Boss est apparu !");
+        }
+    }
 
-        // 🎵 Coupe musique + joue reward sound
+    public void BossDied()
+    {
         if (MusicManager.instance != null)
         {
-            MusicManager.instance.StopMusic();
-            MusicManager.instance.PlayRewardSound();
+            MusicManager.instance.StartVictorySequence();
         }
+    }
 
-        // 🎁 récompense
-        if (rewardObject != null)
-            rewardObject.SetActive(true);
+    public void ActivatePortal()
+    {
+        if (portal != null)
+        {
+            portal.SetActive(true);
+            Debug.Log("Portail activé !");
+        }
     }
 }

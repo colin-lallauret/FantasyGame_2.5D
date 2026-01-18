@@ -9,6 +9,7 @@ TagManager:
   - Sword
   - Enemy
   - Ghost
+  - Boss
   layers:
   - Default
   - TransparentFX
